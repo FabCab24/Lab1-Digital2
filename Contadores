@@ -1,0 +1,109 @@
+/* 
+Laboratorio Electronica Digital 2
+Fabiola Caballeros 24927
+Laboratorio 1: Repaso GPIOs
+*/
+
+/*Librerias*/
+#include <Arduino.h>
+//#include <stdio.h>
+//#include <stdint.h>
+
+/*Definiciones*/
+const int ledA=33;
+const int ledB=25;
+const int ledC=26;
+const int ledD=27;
+
+const int botonIN=34; //incrementa
+const int botonDE=35; //decrementa
+const int botonM=32; //cambia de modo
+
+/*Variables globales*/
+int contador = 0;
+//int modo = 0;
+
+int nuevoestadoIN = LOW;
+int nuevoestadoDE = LOW;
+//int nuevoestadoM;
+
+/*Funcion principal*/
+void setup(){
+
+pinMode(botonIN,INPUT);
+pinMode(botonDE,INPUT);
+pinMode(botonM, INPUT_PULLDOWN);
+
+pinMode(ledA,OUTPUT);
+pinMode(ledB,OUTPUT);
+pinMode(ledC,OUTPUT);
+pinMode(ledD,OUTPUT);
+}
+
+void loop(){
+
+int estadoIN = digitalRead(botonIN);
+int estadoDE = digitalRead(botonDE);
+int estadoM = digitalRead(botonM);
+
+//Incremento
+if(estadoIN==HIGH && nuevoestadoIN==LOW){
+  delay(50);
+  estadoIN = digitalRead(botonIN);
+
+  if(estadoIN==HIGH){
+    contador++;
+    if(contador>4){
+        contador=0; //limito el maximo del contador
+    }
+  }
+}
+nuevoestadoIN=estadoIN;  //actualizo estado del boton
+
+//Decremento
+if(estadoDE==HIGH && nuevoestadoDE==LOW){
+  delay(50);
+  estadoDE = digitalRead(botonDE);
+  if(estadoDE==HIGH){
+    contador--;
+    if(contador<0){
+        contador=4; //limito el minimo del contador
+    }
+  }
+}
+nuevoestadoDE=estadoDE; //actualizo estado del boton
+
+
+switch (contador) {
+    case 0:
+      digitalWrite(ledA, LOW);
+      digitalWrite(ledB, LOW);
+      digitalWrite(ledC, LOW);
+      digitalWrite(ledD, LOW);
+      break;
+    case 1:
+      digitalWrite(ledA, HIGH);
+      digitalWrite(ledB, LOW);
+      digitalWrite(ledC, LOW);
+      digitalWrite(ledD, LOW);
+      break;
+    case 2:
+      digitalWrite(ledA, LOW);
+      digitalWrite(ledB, HIGH);
+      digitalWrite(ledC, LOW);
+      digitalWrite(ledD, LOW);
+      break;
+    case 3:
+      digitalWrite(ledA, LOW);
+      digitalWrite(ledB, LOW);
+      digitalWrite(ledC, HIGH);
+      digitalWrite(ledD, LOW);
+      break;
+    case 4:
+      digitalWrite(ledA, LOW);
+      digitalWrite(ledB, LOW);
+      digitalWrite(ledC, LOW);
+      digitalWrite(ledD, HIGH);
+      break;
+}
+}

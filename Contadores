@@ -6,7 +6,7 @@ Laboratorio 1: Repaso GPIOs
 
 /*Librerias*/
 #include <Arduino.h>
-//#include <stdio.h>
+#include <stdio.h>
 //#include <stdint.h>
 
 /*Definiciones*/
@@ -53,7 +53,7 @@ if(estadoIN==HIGH && nuevoestadoIN==LOW){
 
   if(estadoIN==HIGH){
     contador++;
-    if(contador>4){
+    if(contador>15){
         contador=0; //limito el maximo del contador
     }
   }
@@ -67,43 +67,35 @@ if(estadoDE==HIGH && nuevoestadoDE==LOW){
   if(estadoDE==HIGH){
     contador--;
     if(contador<0){
-        contador=4; //limito el minimo del contador
+        contador=15; //limito el minimo del contador
     }
   }
 }
 nuevoestadoDE=estadoDE; //actualizo estado del boton
 
+//matriz de numeros binarios del 0 al 15 (4 bits, 2^4 = 16 combinaciones o numeros)
+const int contadorbinario[16][4]={
+{LOW,LOW,LOW,LOW}, //0
+{LOW,LOW,LOW,HIGH}, //1
+{LOW,LOW,HIGH,LOW}, //2
+{LOW,LOW,HIGH,HIGH}, //3
+{LOW,HIGH,LOW,LOW}, //4
+{LOW,HIGH,LOW,HIGH}, //5
+{LOW,HIGH,HIGH,LOW}, //6
+{LOW,HIGH,HIGH,HIGH}, //7
+{HIGH,LOW,LOW,LOW}, //8
+{HIGH,LOW,LOW,HIGH}, //9
+{HIGH,LOW,HIGH,LOW}, //10
+{HIGH,LOW,HIGH,HIGH}, //11
+{HIGH,HIGH,LOW,LOW}, //12
+{HIGH,HIGH,LOW,HIGH}, //13
+{HIGH,HIGH,HIGH,LOW}, //14
+{HIGH,HIGH,HIGH,HIGH}, //15
+};
 
-switch (contador) {
-    case 0:
-      digitalWrite(ledA, LOW);
-      digitalWrite(ledB, LOW);
-      digitalWrite(ledC, LOW);
-      digitalWrite(ledD, LOW);
-      break;
-    case 1:
-      digitalWrite(ledA, HIGH);
-      digitalWrite(ledB, LOW);
-      digitalWrite(ledC, LOW);
-      digitalWrite(ledD, LOW);
-      break;
-    case 2:
-      digitalWrite(ledA, LOW);
-      digitalWrite(ledB, HIGH);
-      digitalWrite(ledC, LOW);
-      digitalWrite(ledD, LOW);
-      break;
-    case 3:
-      digitalWrite(ledA, LOW);
-      digitalWrite(ledB, LOW);
-      digitalWrite(ledC, HIGH);
-      digitalWrite(ledD, LOW);
-      break;
-    case 4:
-      digitalWrite(ledA, LOW);
-      digitalWrite(ledB, LOW);
-      digitalWrite(ledC, LOW);
-      digitalWrite(ledD, HIGH);
-      break;
-}
+const int bitsbinarios[4]={ledA,ledB,ledC,ledD}; //arreglo con pines de led para simular bits significativos
+
+for (int i = 0; i < 4; i++) {
+    digitalWrite(bitsbinarios[i], contadorbinario[contador][i]); //recorre los 4 leds
+  }
 }
